@@ -1,0 +1,68 @@
+# Episode 1
+
+- Welcome to Episode 1 of Take Control of Your Tech! I’m your host, Will Smith, and today we’re going to talk about what this new show is, the very bad day that IT folks around the world had this week (and how it affects you), what’s been going on with my switch to Linux since the end of the Dual Boot Diaries, and I’ll answer some of your questions!
+- 
+- New Show
+    - Mission, scope, format, goals, hopes, dreams
+    - Making your technology work for you, not the faceless multinational companies that have turned each of us into a revenue line aka enshittification
+    - work, play, projects (ESP32 and Raspberry Pi stuff), consumer electronics, and anything else that lives in the realm of things you’ve bought that don’t really work for you.
+    - This also means we’re going to talk about
+- AD 1: [https://join.fastmail.com/will](https://join.fastmail.com/will)
+- News
+    - A Bad Day for Sysadmins and IT folks today - two big vulnerabilities that affect a huge number of computers on the web, one that mainly affects servers and another that affects almost everyone
+    - What they are
+        - eMudhra ([https://arstechnica.com/security/2026/10/the-internet-goes-on-high-alert-after-discovery-of-8-compromised-tls-certs/](https://arstechnica.com/security/2026/10/the-internet-goes-on-high-alert-after-discovery-of-8-compromised-tls-certs/)) owned certificates that had private keys so weak that people coule easily make fake credentials for pretty much any site on the internet
+            - It affects computers, browsers, IoT devices, docker containers, python scripts, etc and allows for man-in-the-middle attacks, where a compromised machine intercepts communication between two uncompromised machines, collecting credentials and then using those creds to do other nefarious stuff
+        - PHP vulnerability is a remote code exploit
+            - Basically vulnerabilities in widely used versions of PHP
+            - PHP is the scripting language used for an enormous number of dynamic websites and services (blogging software like Wordpress, phpBB, MediaWiki,
+            - It’s a remote code exploit, so once a malicious actor finds an affected machine, they can run whatever code they want on that, creating a botnet or exploiting other vulnerabilities inside your firewall.
+            - This mostly affects servers, but if you self-host services at home that use PHP you may be affected (
+    - How to fix?
+        - Update your computers,  your browsers, and any software that uses a certificate (pretty much everything)
+        - Also update your internet of things stuff. Anything that uses PHP and access to the Internet or has certificates needs an update.
+        - If you can’t update something that has access to the broader Internet (Home Assistant, Plex, etc), close the ports that give access to those devices while you wait for the updates
+        - I spent all morning updating stuff on my wife and daughters devices
+- AD 2: [https://join.fastmail.com/will](https://join.fastmail.com/will)
+- Linux Journey
+    - Noctalia v5 -
+        - New main version seems good to go. I’ve been using it for a few weeks now and it’s solid
+        - Migrating wasn’t seamless, but you can run both at the same time while you’re transitioning
+            - You have to manually update your Niri or Hyperland configs. I made a copy of my config.kdl and then manually changed each of the old qs commands to the new noctalia commands for stuff that noctalia handles (launcher, media and brightness controls, task switcher, etc. Basically just found all the references to noctalia-shell and then replaced them with the new noctalia msg commands
+            - To migrate my desktop, I reconfigured noctalia settings on my desktop, exported it using the Export config option in the Noctalia Settings panel. On the laptop, I installed noctalia, pulled the niri config file down, and rebooted. Because the updated niri config starts noctalia, it worked immediately on reboot. I was able to put the noctalia config file I exported in my .config/noctalia directory and my settings from the desktop applied instantly.
+                - This legit felt like magic.
+        - Weird bug - the bottom corners of my screen have blurry squares that are like 20px on each side. Seems to be tied to the Desktop / Screen Corners setting, which blacks out the square corners of your display
+        - I also switched to Noctalia Greeter, but we’ll talk about that in a future episode. It was much more of a pain in the ass to configure than the Noctalia v4 > v5 transition
+    - New Plex + Game Server
+        - Fedora server, using a laptop with a busted hinge instead of a NUC-style box
+            - Disconnected the internal screen from the motherboard so I could see the BIOS on an external screen
+        - Fedora server did the same dopey thing as Ubuntu server with disk space
+            - The main partition is just 15GB. The expectation is that you’ll set up different partitions for your data and run other services in VMs on other partitions
+            - Was able to resize really easily by running `sudo lvextend --resizefs --extents +50%FREE /dev/mapper/<volume name>`
+        - Running Plex in Podman instead of Docker
+            - Docker and podman are compatible with each other.
+            - Instantiated the container using a command line instead of a compose.yml file like I did on the debian machine w/ portainer
+            - Seems generally more suited for the kind of stuff I do (homelab nonsense vs. corporate IT use of Docker
+            - These run on
+    - Upcoming topics I also tackled during the break:
+        - Protontricks to add missing dependencies to Windows apps
+        - Glancesapp + feedgrabber for a custom browser homepage
+        - Syncing calendars in a way that makes sense
+        - getting my printer working at home
+        - setting up localsend (which continues to own)
+        - Figuring out a better way to use Dropbox on Linux
+        - Reworking my partitions on my desktop to make more sense for the way I actually use the PC now (Linux first, Windows for DRM games basically)
+        - Getting Affinity apps working in Linux
+        - Fingerprint sensors and Linux
+    - Ad 3: [https://join.fastmail.](https://join.fastmail.fm)com/will
+    - Questions - takecontrol@content.town
+        - Fernando Linux 101 - File navigation and structure
+        - Grand Exalted - Mindset changes
+            - distro repos vs. user repos vs. containers (flatpaks, snaps, docker) vs. apppkg vs. compile on your own
+            - Settings for everything should be in flat text files
+        - Dick - Linux Futzing Laptop
+            - check for Linux support
+            - It’s OK to dig out an old laptop or buy a cheap used laptop for this
+            - XPS 13 (new Core 5 320 6-core, 8GB RAM, $800) - L1Techs forum thread ([https://forum.level1techs.com/t/linux-distro-for-dell-xps-13-dx13260/253705](https://forum.level1techs.com/t/linux-distro-for-dell-xps-13-dx13260/253705)) had a lot of good info.
+                - Jeff Geerling posted a video with Fedora on it, but I don’t have personal experience and documentation on XPS13s is hard, because there are 12 different SKUs with that model name
+                - The type of stuff I’ve had trouble with with XPS 13s in the past are the camera and fingerprint reader
