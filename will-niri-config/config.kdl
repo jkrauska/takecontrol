@@ -1,0 +1,513 @@
+// Niri configuration for CachyOS
+// For documentation and full reference, see: https://github.com/YaLTeR/niri/wiki
+
+// ────────────── Input Configuration ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Input
+
+
+input {
+    keyboard {
+        xkb {
+            layout "us" // Use the German keyboard layout
+        }
+        numlock // Enable numlock on startup
+    }
+
+    touchpad {
+        tap // Enable tap-to-click
+        natural-scroll // Enable natural (macOS-style) scrolling
+	dwt
+	click-method "clickfinger"
+    }
+    mouse {
+        // Uncomment for accuracy
+  	accel-speed 0
+  	accel-profile "flat"
+    }
+
+//    focus-follows-mouse // Automatically focus windows under the mouse pointer
+//    workspace-auto-back-and-forth // Enable workspace back & forth switching
+}
+ 
+
+// ────────────── Output Configuration ──────────────
+// You can run `niri msg outputs` to get the correct name for your displays.
+// You will have to remove "/-" and edit it before it takes effect.
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
+
+include "monitors.kdl"
+
+
+// ────────────── Gestures ──────────────
+// Move this to monitors.kdl for the desktop
+
+//gestures { 
+//	hot-corners { 
+//	    off 
+//	}
+//}
+
+// ────────────── Keybindings ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Key-Bindings
+
+binds {
+    MOD+SHIFT+ESCAPE                     { show-hotkey-overlay; }
+
+// #"Applications" 
+    MOD+RETURN                          hotkey-overlay-title="Open Terminal" { spawn-sh "alacritty"; }
+    MOD+SPACE                           hotkey-overlay-title="Open App Launcher" { spawn-sh "noctalia msg panel-toggle launcher"; }
+    MOD+B                               hotkey-overlay-title="Open Browser" { spawn-sh "firefox"; }
+//    MOD+ALT+L                         hotkey-overlay-title="Lock Screen" { spawn-sh "swaylock"; }
+    MOD+COMMA    						hotkey-overlay-title="Open Control Center" { spawn-sh "noctalia msg panel-toggle control-center"; }
+    MOD+S								hotkey-overlay-title="Open Settings" { spawn-sh "noctalia msg settings-toggle"; } 
+    MOD+D 								hotkey-overlay-title="Open Discord" { spawn-sh "discord"; }
+    
+    // Please choose your own file manager
+    MOD+E                             	hotkey-overlay-title="File Manager" { spawn-sh "nautilus"; }
+
+
+
+// #"Media Controls"
+    // Example volume keys mappings for PipeWire & WirePlumber.
+    // The allow-when-locked=true property makes them work even when the session is locked.
+    XF86AudioRaiseVolume                hotkey-overlay-title="Volume Up" allow-when-locked=true { spawn-sh "noctalia msg volume-up"; }
+    XF86AudioLowerVolume                hotkey-overlay-title="Volume Down" allow-when-locked=true { spawn-sh "noctalia msg volume-down"; }
+    XF86AudioMute                       hotkey-overlay-title="Mute" allow-when-locked=true { spawn-sh "noctalia msg volume-mute"; }
+    XF86AudioMicMute                    hotkey-overlay-title="Mic Mute" allow-when-locked=true { spawn-sh "noctalia msg mic-mute"; }
+    XF86AudioNext                       hotkey-overlay-title="Next Track" allow-when-locked=true { spawn-sh "noctalia msg media next"; }
+//  XF86AudioPause                      hotkey-overlay-title="Pause" allow-when-locked=true { spawn-sh ""; }
+    XF86AudioPlay                       hotkey-overlay-title="Play" allow-when-locked=true { spawn-sh "noctalia msg media toggle"; }
+    XF86AudioPrev                       hotkey-overlay-title="Prev Track" allow-when-locked=true { spawn-sh "noctalia msg media previous"; }
+
+// ---move this section to an include that's only on the laptop
+// #"Laptop Controls"
+    XF86MonBrightnessUp 		hotkey-overlay-title="Brightness Up" { spawn-sh "noctalia msg brightness-up"; }
+    XF86MonBrightnessDown 		hotkey-overlay-title="Brightness Down" { spawn-sh "noctalia msg brightness-down"; }
+    
+// #"Utility Shortcuts"
+    MOD+SHIFT+L   						hotkey-overlay-title="Dark Mode Toggle" { spawn-sh "noctalia msg theme-mode-toggle"; }
+    MOD+ALT+W       					hotkey-overlay-title="Select Wallpaper" {spawn-sh "noctalia msg panel-toggle wallpaper"; } 
+    MOD+V 								hotkey-overlay-title="Clipboard" { spawn-sh "noctalia msg panel-toggle clipboard"; }
+    MOD+L 								hotkey-overlay-title="Lock Screen" { spawn-sh "noctalia msg session lock"; }
+    MOD+Q                               hotkey-overlay-title="Close Window" { close-window; }
+    MOD+ESCAPE                          hotkey-overlay-title="Emergency Escape" allow-inhibiting=false { toggle-keyboard-shortcuts-inhibit; }
+    
+    CTRL+ALT+DELETE                     hotkey-overlay-title="Shutdown Niri" { quit; } // Also quits Niri
+    MOD+SHIFT+P                         hotkey-overlay-title="Power Off Monitors" { power-off-monitors; } // Turn off screens (useful for OLED or privacy)
+    MOD+O                               hotkey-overlay-title="Show Overview" repeat=false { toggle-overview; }
+    ALT+TAB 				hotkey-overlay-title="Window Switcher" { spawn-sh "noctalia msg window-switcher hold"; }
+
+// #"Window Focus"
+    MOD+LEFT                            { focus-column-left; }
+    MOD+RIGHT                           { focus-column-right; }
+    MOD+UP                              { focus-monitor-up; }
+    MOD+DOWN                            { focus-monitor-down; }
+
+    MOD+HOME                            { focus-column-first; }
+    MOD+END                             { focus-column-last; }
+
+    MOD+SHIFT+LEFT                      { focus-monitor-left; }
+    MOD+SHIFT+RIGHT                     { focus-monitor-right; }
+    MOD+SHIFT+UP                        { focus-window-up; }
+    MOD+SHIFT+DOWN                      { focus-window-down; }
+
+    MOD+WHEELSCROLLDOWN                 { focus-column-right; } 
+    MOD+WHEELSCROLLUP                   { focus-column-left; }
+
+    MOD+ALT+DOWN   		        cooldown-ms=150 { focus-workspace-down; }
+    MOD+ALT+UP		                cooldown-ms=150 { focus-workspace-up; }
+
+    MOD+SHIFT+WHEELSCROLLDOWN           { focus-monitor-down; }
+    MOD+SHIFT+WHEELSCROLLUP             { focus-monitor-up; }
+
+    MOD+ALT+WHEELSCROLLDOWN 		{ focus-workspace-down; }
+    MOD+ALT+WHEELSCROLLUP		{ focus-workspace-up; }
+
+//    MOD+TAB                             { focus-workspace-previous; }
+
+
+//    MOD+WHEELSCROLLRIGHT                { focus-column-right; }
+//    MOD+WHEELSCROLLLEFT                 { focus-column-left; }
+
+ 
+// #"Window Movement" 
+
+    MOD+CTRL+LEFT                       { move-column-left; }
+    MOD+CTRL+RIGHT                      { move-column-right; }
+    MOD+CTRL+UP                         { move-column-to-monitor-up; }
+    MOD+CTRL+DOWN                       { move-column-to-monitor-down; }
+
+    MOD+CTRL+HOME                       { move-column-to-first; }
+    MOD+CTRL+END                        { move-column-to-last; }
+
+    MOD+SHIFT+CTRL+LEFT                 { move-column-to-monitor-left; }
+    MOD+SHIFT+CTRL+RIGHT                { move-column-to-monitor-right; }
+    MOD+SHIFT+CTRL+UP                   { move-column-to-monitor-up; }
+    MOD+SHIFT+CTRL+DOWN                 { move-column-to-monitor-down; }
+
+    MOD+CTRL+WHEELSCROLLDOWN            { move-column-right; }
+    MOD+CTRL+WHEELSCROLLUP              { move-column-left; }
+
+    MOD+CTRL+ALT+DOWN     	        cooldown-ms=150 { move-column-to-workspace-down; }
+    MOD+CTRL+ALT+UP	                cooldown-ms=150 { move-column-to-workspace-up; }
+
+//    MOD+CTRL+WHEELSCROLLRIGHT           { move-column-right; }
+//    MOD+CTRL+WHEELSCROLLLEFT            { move-column-left; }
+
+    MOD+CTRL+SHIFT+WHEELSCROLLDOWN      { move-column-to-monitor-down; }
+    MOD+CTRL+SHIFT+WHEELSCROLLUP        { move-column-to-monitor-up; }
+
+    MOD+CTRL+ALT+WHEELSCROLLDOWN 	{ move-column-to-workspace-down; }
+    MOD+CTRL+ALT+WHEELSCROLLUP		{ move-column-to-workspace-up; }
+
+// #"Window Layout"
+    MOD+CTRL+F                          { expand-column-to-available-width; }
+    MOD+C                               { center-column; }
+    MOD+CTRL+C                          { center-visible-columns; }
+    MOD+SHIFT+EQUAL			{ set-column-width "100%"; }
+    MOD+MINUS                           { set-column-width "-5%"; }
+    MOD+EQUAL                           { set-column-width "+5%"; }
+    MOD+SHIFT+MINUS                     { set-window-height "-10%"; }
+//    MOD+SHIFT+EQUAL                     { set-window-height "+10%"; }
+    MOD+CTRL+SHIFT+R			{ switch-preset-window-height; }
+    MOD+SHIFT+R				{ switch-preset-column-width; }
+    MOD+T                               { toggle-window-floating; }
+    MOD+F                               { fullscreen-window; }
+    MOD+W                               { toggle-column-tabbed-display; }
+    MOD+bracketleft			{ consume-or-expel-window-left; }
+    MOD+bracketright			{ consume-or-expel-window-right; }
+
+// #"Screenshots"
+    CTRL+SHIFT+1                        hotkey-overlay-title="Screenshot Region" { spawn-sh "noctalia msg screenshot-region"; }
+    CTRL+SHIFT+3                        hotkey-overlay-title="Screenshot Fullscreen" { spawn-sh "noctalia msg screenshot-fullscreen"; }
+    CTRL+SHIFT+2                        hotkey-overlay-title="Screenshot Annotate" { spawn-sh "noctalia msg screenshot-annotate"; }
+}
+
+// ────────────── Startup Applications ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Miscellaneous#spawn-sh-at-startup
+    spawn-sh-at-startup "sway-audio-idle-inhibit"
+    spawn-sh-at-startup "/usr/lib/polkit-kde-authentication-agent-1 &" // Polkit
+    spawn-sh-at-startup "swww-daemon" // Wallpaper daemon
+//    spawn-sh-at-startup "swww img /usr/share/wallpapers/cachyos-wallpapers/Skyscraper.png" // Set wallpaper
+//    spawn-sh-at-startup "com.github.wwmm.easyeffects"
+//    spawn-sh-at-startup "liquidctl --match ryujin set pump-fan speed 30"
+    spawn-sh-at-startup "wl-paste --watch cliphist store"  //start cliphist
+    spawn-at-startup "librepods"
+//    spawn-at-startup "slack"
+//    spawn-at-startup "discord"
+//    spawn-at-startup "opendeck"
+    prefer-no-csd // Disable program decorations
+    screenshot-path "/home/will/Pictures/Screenshots" // Disable screenshot saving
+    spawn-sh-at-startup "rclone mount dropbox: /home/will/dropbox/ --transfers 20" // mount dropbox
+//    spawn-at-startup "companion"
+    spawn-sh-at-startup "signal-desktop"
+    spawn-at-startup "qpwgraph" "-m" "-a" "/home/will/.config/qpwgraph/default.qpwgraph"
+
+// ────────────── Layout Settings ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
+
+    layout {
+        gaps 8 // Gap between windows
+        center-focused-column "never" // Don’t auto-center focused column
+        always-center-single-column
+//        default-column-display 
+        preset-column-widths {
+            proportion 0.25
+            proportion 0.5
+            proportion 0.75
+        }
+ 	preset-window-heights {
+	    proportion 0.5
+	    proportion 1.0
+	}
+        focus-ring {
+            width 3
+            active-color "#00ac89"
+            inactive-color "#505050"
+        }
+	border {
+	    width 2
+	    active-color "#ffc87f"
+	    inactive-color "#909090"
+	    urgent-color "#9b0000"
+	}
+        shadow {
+            softness 30
+            spread 5
+            offset x=0 y=5
+            color "#0007"
+        }
+
+        background-color "00000020"
+ 
+
+       struts {}
+    }
+
+// ────────────── Animation Settings ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Animations
+    animations {
+        workspace-switch {
+            spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+        }
+        window-open {
+            duration-ms 200
+            curve "ease-out-quad"
+        }
+        window-close {
+            duration-ms 200
+            curve "ease-out-cubic"
+        }
+        horizontal-view-movement {
+            spring damping-ratio=1.0	 stiffness=800 epsilon=0.0001
+        }
+        window-movement {
+            spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+        }
+        window-resize {
+            spring damping-ratio=1.0 stiffness=1000 epsilon=0.0001
+        }
+        config-notification-open-close {
+            spring damping-ratio=0.6 stiffness=1200 epsilon=0.001
+        }
+        screenshot-ui-open {
+            duration-ms 300
+            curve "ease-out-quad"
+        }
+        overview-open-close {
+            spring damping-ratio=1.0 stiffness=800 epsilon=0.0001
+        }
+    }
+
+// ______________ Workspace Declarations _____________
+// MOVED TO window-rules.kdl
+
+// ────────────── Window Rules ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
+
+window-rule {
+    match app-id="steam" title=r#"^notificationtoasts_\d+_desktop$"#
+    default-floating-position x=10 y=10 relative-to="bottom-right"
+}
+
+    window-rule {
+        match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+        open-floating true // Always float Firefox PiP windows
+    }
+
+    window-rule {
+	match app-id="Audacity"
+	open-on-workspace "chat"
+	default-column-width { proportion 0.5; }
+    }
+    window-rule {
+        match app-id=r#"firefox$"# 
+	open-on-workspace "main"
+	default-column-width { proportion 0.75; }
+    }
+
+    window-rule {
+	match app-id="steam_app_" 
+	open-on-workspace "game"
+	open-fullscreen true
+  	open-focused false
+    }
+
+    window-rule {
+	match app-id="zoom" title="annotate_toolbar"
+	open-on-workspace "chat" 
+	//default-column-width { proportion .1;}
+	open-floating true
+    }
+
+    window-rule { 
+	match app-id=r#"chromium$"# 
+	open-on-workspace "main"
+    }
+
+    window-rule {
+	match app-id=r#"bluebubbles"#
+	open-on-workspace "chat"
+	open-focused false
+	default-column-width { proportion 0.25; }
+    }
+
+    window-rule { 
+	match app-id=r#"discord"# 
+	open-on-workspace "chat"
+	open-focused false
+        default-column-width { proportion 0.25; }
+    }
+    window-rule {
+        match app-id="steam" title="Steam"
+        open-on-workspace "chat"        
+//	open-on-output "ASUSTek COMPUTER INC ROG PG259QNR #HDMYMxgwAASM"
+//      tiled-state false
+	open-focused false
+        default-column-width { proportion 0.5; }
+    }
+
+    window-rule {
+ 	match app-id="1password"
+	block-out-from "screencast"
+    }
+
+    window-rule {
+    	match app-id=r#"^com\.obsproject\.Studio$"#
+	exclude title="Projector - Preview"
+	min-width 876
+	open-on-workspace "chat"
+    }
+
+    window-rule { 
+	match app-id="steam" title="Friends List"
+	open-on-workspace "chat"
+     	min-width 364
+	max-width 400
+    }
+
+    window-rule { 
+	match app-id=r#"signal$"# 
+	open-on-workspace "chat"
+	open-focused false
+        default-column-width { proportion 0.25; }
+	
+    }
+
+    window-rule {
+        match app-id="Notion"
+        open-on-workspace "main"
+        default-column-width { proportion 0.5; }
+    }
+   	
+    window-rule {
+        geometry-corner-radius 20 // Set every window radius to 20
+        clip-to-geometry true
+    }
+    window-rule {
+ 	match app-id="slack"
+	open-on-workspace "chat"
+	open-focused false
+        default-column-width { proportion 0.25; }
+    }
+    window-rule {
+	match app-id="opendeck"
+	open-on-workspace "chat"
+	open-focused false
+    }
+
+include "window-rules.kdl"
+
+// ────────────── Environment Variables ──────────────
+// https://github.com/YaLTeR/niri/wiki/Configuration:-Miscellaneous#environment
+	
+    environment {
+        DISPLAY ":1"
+        ELECTRON_OZONE_PLATFORM_HINT "auto"
+        QT_QPA_PLATFORM "wayland;xcb"
+        QT_WAYLAND_DISABLE_WINDOWDECORATION "1"
+        XDG_SESSION_TYPE "wayland"
+        XDG_CURRENT_DESKTOP "niri"
+	PHONE_MAC_ADDRESS  "60:57:C8:60:5D:B5"
+	MOZ_ENABLE_WAYLAND "1"
+	QT_AUTO_SCREEN_SCALE_FACTOR "1.5"
+	GDK_SCALE "1.5"
+	GTK_SCALE "1.5"
+    }
+
+    hotkey-overlay {
+        skip-at-startup
+    }
+// _______________ Noctalia Settings _______________
+// https://docs.noctalia.dev/getting-started/installation/
+
+
+//window-rule {
+// Rounded corners for a modern look.
+//  geometry-corner-radius 15
+// Clips window contents to the rounded corner boundaries.
+//  clip-to-geometry true//}
+
+layer-rule {
+    match namespace="^quickshell-overview$"
+    place-within-backdrop true
+}
+
+window-rule {
+//    match namespace="noctalia-window-switcher"
+    background-effect {
+		blur true
+		xray false
+		}
+    }
+
+layer-rule {
+  match namespace="^noctalia-(bar-[^\"]+|notification|dock|panel|attached-panel|osd)$"
+  background-effect {
+    xray false
+    // blur false
+  }
+}
+
+layer-rule {
+    match namespace="noctalia-window-switcher"
+    background-effect {
+        blur true
+        xray false
+   }
+}
+
+blur {
+  passes 2        // more passes = stronger blur (default: 3)
+  offset 3.0      // sample distance per pass (default: 3.0)
+  noise 0.03      // grain overlay (default: 0.02)
+  saturation 1.0  // color saturation boost (default: 1.5)
+}
+
+debug {
+  // Allows notification actions and window activation from Noctalia.
+  honor-xdg-activation-with-invalid-serial
+}
+
+// Set the overview wallpaper on the backdrop.
+layer-rule {
+  match namespace="^noctalia-backdrop"
+  place-within-backdrop true 
+  background-effect {
+  	blur true
+	xray false
+ 	}
+}
+
+overview {
+	backdrop-color "#4c566a90"
+	zoom 0.5
+  }
+
+
+
+// ____ LAPTOP SETTINGS ____
+//    switch-events {
+//	lid-closed { spawn-sh "/home/will/.config/niri/locksus"; } 
+//   	lid-open { spawn-sh "qs -c noctalia msg session lock"; }
+//	}
+
+// ___________ Cursor Settings ___________
+cursor {
+//	xcursor-theme "breeze_cursors"
+//	xcursor-size 32
+//	hide-after-inactive-ms 10000
+	
+	}
+
+spawn-at-startup "noctalia"
+
+
+    spawn-sh-at-startup "sleep 20 && opendeck"
+    spawn-sh-at-startup "sleep 15 && slack"
+    spawn-sh-at-startup "sleep 10 && discord"
+    spawn-sh-at-startup "sleep 18 && app.bluebubbles.BlueBubbles"
+    spawn-at-startup "xwayland-satellite"
+
+
+include "noctalia.kdl"

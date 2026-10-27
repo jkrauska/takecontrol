@@ -1,0 +1,23 @@
+//MOVE TO DESKTOP window-rules.kdl
+    window-rule {
+        match app-id=r#"^com\.obsproject\.Studio$"# title="Projector - Scene"
+//      open-on-output "A/Vaux Electronics AVT GC573 Unknown"
+        open-on-output "HDMI-A-1"
+    }
+
+
+    window-rule {
+        match title="Steam Big Picture Mode"
+        open-on-output "A/Vaux Electronics AVT GC573 Unknown"
+ //       open-on-workspace "Game"
+	open-fullscreen true
+	open-focused true
+    }
+
+
+//OBS Output 
+     window-rule {
+	match title="Scene: Capture"
+	open-on-output "HDMI-A-1"
+
+     }

@@ -1,2 +1,2 @@
 # takecontrol
-The repo for the Take Control of Your Tech podcast. Includes shownotes, code, and docs for work discussed on the show. Want to add your own docs? Submit a pull request!
+Welcome to the repo for the Take Control of Your Tech Podcast. It will contain things like Markdown-formatted shownotes, as well as code and text artifacts, like Will's Niri config. 
